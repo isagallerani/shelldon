@@ -1,0 +1,11 @@
+- Português
+
+Para construir o software execute make. Para instalar o software, 
+execute make install. Defina a variável de usuário PREFIX para 
+substituir o caminho de instalação padrão.
+
+- English
+
+To build the software run make. To install the software,
+Run make install. Set the PREFIX user variable to
+Replace the default installation path.
