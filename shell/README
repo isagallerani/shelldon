@@ -1,0 +1,167 @@
+
+    POSIX Exempli Gratia (POSIX by example)
+
+    Copyright (c) 2015 Francisco Jose Monaco <monaco@icmc.usp.br>
+    This is Free Open Source Software. For licensing, see COPYING
+    POSIX-eg repository can be found at https://gitlab.com/monaco/posixeg
+
+
+
+    	     		    SHELL EXERCISE
+			    ---------------
+
+OVERVIEW
+--------
+
+Foosh is a sh-like shell implementing a subset of POSIX shell specification,
+including basic command line execution with  input/output redirection, pipeline,
+job control and not much else.  The complete specification is found in file
+foosh.txt.
+
+The implementation of foosh supplied with POSIXeg is incomplete and is meant
+as an skeleton to be further developed by the student as an exercise. The 
+proposed work consists in implemeting a foosh _clone_ that meets the 
+complete specification.
+
+Please, read the following instructions thoroughly before starting to work on
+the exercise. There are some important rules and useful tips that you should
+not miss.
+
+If you are following the proposed exercises' roadmap, you will upload your 
+software to a public Git repository using a Free Software / Open Source license.
+
+INSTRUCTIONS
+------------
+
+First, read posixeg/instructions/README.
+
+Then, please, go through foosh specification in foosh.txt.
+
+The file, formatted like a traditional man page, specifies the basic software
+functionality. The shell prototype is implemented in the source file
+foosh/main.c, and can be built and installed with the aid of the provided
+Makefile by issuiing
+
+    $ cd <somepath>/posixeg/exercises/shell
+    $ make
+    $ make install
+
+Note: you should have already evoked autotools configure script from the
+top source directory. If not, consult posixeg/README and issue
+
+    $ cd <somepath>/posixeg
+    $ ./configure --prefix=<installpath>
+
+before trying to build foosh.
+
+The command shall build the shell, as well as some executable programs
+meant for testing it (found under shell/tests).  Tests are currently not automated
+and must be executed manually (see shell/tests/README).
+
+The test suite consists of several checks, all of them should ideally
+report success.  The provided implementation is, however, incomplete and,
+therefore, some tests will fail. Your task consists in finishing the library
+implementation so that it complies with the man page (runcmd.txt)
+
+To begin with the exercise you should follow the general guidelines given in
+posixeg/instructions/README. In addition, please notice the following
+directions specific to this exercise. Go through the whole instruction
+before you start (as there are some important rules and useful tips ahead).
+
+
+ROADMAP
+-------
+
+1) Create a subdirectory shell within your project's main directory. 
+
+   For instance if your project lies on <somepath>/myproject, create a
+   runcmd directory <somepath>/myproject/shell
+
+   $ cd <somepath>/myproject
+   $ mkdir shell
+
+2) Within your shell directory, put your foosh implementation (see notes bellow)
+
+   Your implementaion shall provide only the sources needed to build
+   your shell.  No other unecessary files should be added to the directory.
+
+   As for the review of your exercise, POSIXeg's own test programs
+   (not yours, if any) will be executed against your shell.  
+
+3) Provide a Makefile to build and install your shell.
+
+   Please, consult posixeg/instructions/README and make sure your Makefile
+   complies with the specifications.
+
+   Alternatively, if you are required to use GNU build system, just follow the
+   standard conventions.
+
+RELEASE IDENTIFIER
+------------------
+
+The release code for this exercise is shell.
+
+Unless otherwise specified, the release numbers of this expercises are
+
+* 000 : update the project tree structure and contents, if not already done
+* 001 : implement foreground program execution
+* 002 : add standard input/output redirection
+* 003 : add unlimited pipeline execution
+* 004 : add job control (terminal signals, jobs, fg, bg) 
+* 005 : add foreground/background (terminal control) 
+* 006 : migrate your project to GNU build system, if not already done
+* 007 : 1.0 candidate release for evaluation
+* 008 : 1.0 release for improved scores
+
+NOTES
+-----
+
+* As always, do not use any external library except the standard libc.
+
+* As an exception, if you wish, you may link your project against libposixeg.
+This may be useful if you opt for using the provided trivial parser, which
+iplements the basic foosh's grammar.  In this case, you should not include
+POSIXeg source code into your own project. Rather, assume the user has
+already installed libposixeg in this build enviroment.
+
+* If you are instructed to rely on GNU build system to build your project,
+and you are linking your shell agains libposixeg, then please, add the
+corresponding checks to autoconf script so that libposixeg
+installation is validated during configure stage (if not, either abord
+with error or provide your alternative your implementation).
+
+* Bear in mind that your project is of a foosh clone, not a foosh
+implementation.  Therefore, you are strongly recommended not to name
+your project 'foosh'. Rather, you are invited to be creative and
+choose an original, inspiring, empowring name for it. 
+
+Frequently Asked Questions
+--------------------------
+
+Q: Should my shell be named foosh?
+A: For God, no! 
+
+Q: May my shell be more sophisticated than foosh specs?
+A: Sure.
+
+Q: Must I use libposixeg for the parser?
+A: No.
+
+Q: May I use libposixeg for the parser?
+A: Yes. In this case, consider it installed in the user's system and
+   add the corresponding Autoconf checks.
+ 
+Q: May I use bison/yacc for the parser?
+A: Yes. In this case add the relevant source code, the corresponding
+   Autoconf checks and Automake.am rules.
+
+Q: What the provided foosh prototype does?
+A: It's just a skeleton that prompts for a command line, reads it
+   and parses it with trivial parser from libposixeg (this library
+   implements the basic foosh grammar). The example illustrates
+   trivial parser usage.
+
+
+
+
+

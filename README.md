@@ -40,6 +40,12 @@ A instalação e a execução são cobertas no arquivo INSTALL.
 
 > Shelldon é derivado do POSIXeg, Copyright (c) 2016, Francisco José Monaco <monaco@icmc.usp.br>
 
+### Como usar o Shelldon
+
+Digite o comando "make" via terminal dentro do diretório Shelldon. Isto irá gerar um arquivo executável called "Shelldon", basta executá-lo
+para usar o shell. 
+
+
 ## English
 
 Shelldon
@@ -79,3 +85,8 @@ The Shelldon source code can be obtained from [source code](https://github.com/S
 Installation and execution are covered in the INSTALL file.
 
 > Shelldon is derived from POSIXeg, Copyright (c) 2016, Francisco José Monaco <monaco@icmc.usp.br>
+
+### How to use Shelldon
+
+Just type "make" (inside the directory "MasterShelf"), it will create an executable file called "Shelldon".
+Now you have to type "./Shelldon", and the shell is ready to be used.
