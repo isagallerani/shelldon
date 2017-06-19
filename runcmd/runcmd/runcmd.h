@@ -29,9 +29,9 @@
 #define RCMD_NONBLOCK '&'	/* Command line nonblock sign.*/
 
 /* Bit mask for interpreting command execution results. */
-
+/* Bitwise Left Shift */
 #define NORMTERM    (1 <<  8)	/* 256 */
-#define EXECOK      (1 <<  9)	/* 1024 */
+#define EXECOK      (1 <<  9)	/* 1024 */ 
 #define NONBLOCK    (1 << 10)	/* 2048 */
 #define RETSTATUS   (0xFF)	/* 255 */
 

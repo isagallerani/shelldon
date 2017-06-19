@@ -38,27 +38,31 @@
 #include <debug.h>
 
 
-/* Executes 'command' in a subprocess. Information on the subprocess execution
-   is stored in 'result' after its completion, and can be inspected with the
-   aid of macros made available for this purpose. Argument 'io' is a pointer
-   to an integer vector where the first, second and third positions store
-   file descriptors to where standard input, output and error, respective, 
-   shall be redirected; if NULL, no redirection is performed. On
-   success, returns subprocess' pid; on error, returns 0. */
+/* 
+
+	Executes 'command' in a subprocess. Information on the subprocess execution
+	is stored in 'result' after its completion, and can be inspected with the
+	aid of macros made available for this purpose. Argument 'io' is a pointer
+	to an integer vector where the first, second and third positions store
+	file descriptors to where standard input, output and error, respective, 
+	shall be redirected; if NULL, no redirection is performed. On
+	success, returns subprocess' pid; on error, returns 0. 
+
+*/
 
 int runcmd (const char *command, int *result, int *io)
 {
   int pid, status; 
   int aux, i, tmp_result;
   char *args[RCMD_MAXARGS], *p, *cmd; 	
-  FILE *fp=NULL;
+  FILE *fp = NULL;
 
   tmp_result = 0;
 
   /* Parse arguments to obtain an argv vector. */
 
   cmd = malloc ((strlen (command)+1) * sizeof(char));
-  sysfail (!cmd, -1);
+  sysfail(!cmd, -1);
   p = strcpy (cmd, command);
 
   i=0;
@@ -69,33 +73,50 @@ int runcmd (const char *command, int *result, int *io)
   /* Create a subprocess. */
 
   pid = fork();
-  sysfail (pid<0, -1);
+  sysfail(pid<0, -1);
 
   if (pid>0)			/* Caller process (parent). */
     {
-      aux = wait (&status);
-      sysfail (aux<0, -1);
+      aux = wait(&status);
+      sysfail(aux<0, -1);
       
-      /* Collect termination mode. */
-      if (WIFEXITED(status)){
-		tmp_result |= NORMTERM;
-		fp = fopen("check.txt","r");
-		if(fp == NULL){
-			tmp_result |= WEXITSTATUS(status);
-			tmp_result |= EXECOK;
-		}		
-		else{
-			tmp_result |= EXECFAILSTATUS & RETSTATUS;
-			fclose(fp);
-			remove("check.txt");
+
+      /*
+         IS_NORMTERM(result) returns true if the subprocess has terminated 
+                             normally; false otherwise.
+         IS_NONBLOCK(result) returns true if the subprocess has been executed
+                             in nonblocking mode; false otherwise.
+         IS_EXECOK(result)   returns true if 'command' has been effectively 
+      		       executed; false otherwise.
+                             the subprocess; false otherwise.
+         EXITSTATUS(result)  returns the exit status returned by the
+                             subproccess.
+      */
+
+      /* Collect termination mode - Process Completion Status   */
+      if (WIFEXITED(status))
+		{ 			/* This macro returns a nonzero value if the child process terminated normally with exit or _exit.*/
+			tmp_result |= NORMTERM;			/* Bitwise OR assignment*/
+			fp = fopen("check.txt","r");
+			if(fp == NULL)
+			{
+				tmp_result |= WEXITSTATUS(status); /* If WIFEXITED is true of status, this macro returns the low-order 8 bits of the exit status value from the child process. */ 
+				tmp_result |= EXECOK;
+			}		
+			else
+			{
+				tmp_result |= EXECFAILSTATUS & RETSTATUS;
+				fclose(fp);
+				remove("check.txt");
+			}
 		}
-	}
     }
 
   else				/* Subprocess (child) */
     {
       aux = execvp (args[0], args);
-	if(aux <= -1){
+	if(aux <= -1)
+	{
 		fp = fopen("check.txt","w");
 		fclose(fp);
 	}
