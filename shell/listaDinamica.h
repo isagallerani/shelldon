@@ -1,6 +1,6 @@
-/* 
-	Item.c 
-
+/* 	
+	listaDinamica.h
+	
 	Shelldon, Copyright(c) 2017, Alessandra Camargo, Alexandre Lara, Lucas Pessoa, Tiago Avellar 
 	<552038@comp.ufscar.br, 587117@comp.ufscar.br, 551864@comp.ufscar.br, 551910@comp.ufscar.br>
 
@@ -24,29 +24,28 @@
 	Our Shelldon repository can be found at https://github.com/SO-II-2017/shelldon
 */
 
-#include "Item.h"
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h> 
+#ifndef LISTA_H
+#define	LISTA_H
 
-ITEM *criar_item(int chave, int pid, int status, int ground, char* nome) {
-    ITEM *item = (ITEM *)malloc(sizeof(ITEM));
-    item->chave = chave;
-    item->pid = pid;
-    item->status = status;
-    item->ground = ground;
-    if (nome != NULL) strcpy(item->nome,nome);
-    else nome = NULL;
-    return item;
-}
+typedef struct lista LISTA;
 
-void apagar_item(ITEM **item) {
-  if (item != NULL) {
-    free(*item);
-    *item = NULL;
-  }
-}
+LISTA *criarLista();
+void inserirElemento(LISTA *lista, int chave, int pid, int status, int ground, char* nome);
+void imprimirLista(LISTA *lista);
+void imprimirLista2(LISTA *lista);
+void buscarChave(LISTA *lista, int chave);
+void buscarPosicao(LISTA *lista, int posicao);
+void removerChave(LISTA *lista, int chave);
+void removerPosicao(LISTA *lista, int posicao);
+void inverterLista(LISTA *lista);
+char  estaOrdenada(LISTA *lista);
+void deletarLista(LISTA **lista);
+int tamanhoLista(LISTA *lista);
+int getStatus(LISTA *lista, int chave);
+int getPIDbyChave (LISTA *lista, int chave);
+int getPIDbyPosition (LISTA *lista, int position);
+void setStatus (LISTA *lista, int chave, int status);
+int proximaChave (LISTA *lista);
 
-void imprimir_item (ITEM *item) {
-	printf("%d",item->chave);
-}
+#endif	/* LISTA_H */
+
