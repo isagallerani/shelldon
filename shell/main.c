@@ -40,12 +40,12 @@
 #include <signal.h>
 #include "listaDinamica.h"
 
-#define PROMPT "> "
+#define PROMPT "$> "
 
 int go_on = 1;			/* This variable controls the main loop. */
 LISTA *jobs;
 
- void setupSignals () {	
+void setupSignals () {	
 	signal (SIGINT,  SIG_IGN);
 	signal (SIGTSTP, SIG_IGN);
 	signal (SIGCHLD, SIG_IGN);
@@ -70,6 +70,19 @@ void redirect (pipeline_t *pipeline) {
 	}
 
 	return;
+}
+void authors () {
+	printf("\n");
+	printf("\tShelldon was created in early 2017 as a practical work of the discipline \n");
+	printf("\tOperating Systems 2, offered by Ph.D. F. Monaco at the Instituto de Mathematical\n");
+	printf("\tand Computer Sciences (ICMC) of the University of São Paulo (USP).\n");
+	printf("\tHere is a list of people who, in some way, make this project become real:\n");
+	printf("\tAlessandra de Souza Camargo   <552038@comp.ufscar.br> \n");
+	printf("\tAlexandre Da Silva Lara Pinto <587117@comp.ufscar.br> \n");
+	printf("\tLucas Eduardo Pessoa          <551864@comp.ufscar.br> \n");
+	printf("\tTiago Avellar Fernandes       <551910@comp.ufscar.br> \n");
+	printf("\tFrancisco José Monaco         <monaco@icmc.usp.br> \n");
+	printf("\n");
 }
 
 void ls () {
@@ -138,7 +151,7 @@ void fjobs () {
 	exit(EXIT_SUCCESS);
 }
 
-void bg (char *command) {
+void bg (char *command) { /* bg — Resume a suspended program without bringing it to the foreground. */
 	int bgPid;
 
 	if (getStatus(jobs,atoi(command)) == 1) printf("Processo ja esta em background\n");
@@ -155,7 +168,7 @@ void bg (char *command) {
 	return;
 }
 
-void fg (char *command) {
+void fg (char *command) { /* continues a stopped job by running it in the foreground */
 	int bgPid, aux, status;
 
 	bgPid = getPIDbyChave(jobs,atoi(command));
@@ -179,6 +192,21 @@ void n_exit () {
 
 	exit(EXIT_SUCCESS);
 }
+
+void help () {
+  printf("==== Shelldon Help Panel ====\n");
+  printf("Type program names and arguments, and hit enter.\n");
+  printf("The following are built in:\n");
+  printf("%s\n", "mkdir");
+  printf("%s\n", "jobs");
+  printf("%s\n", "echo");
+  printf("%s\n", "exit");
+  printf("%s\n", "cd");
+  printf("%s\n", "bg");
+  printf("%s\n", "fg");
+  printf("Use the man command for information on other programs.\n");
+}
+
 
 void clearDone () {
 
@@ -279,6 +307,7 @@ void runcommand (pipeline_t *pipeline) {
 	/* Para executar exit, cd ou mkdir não é necessário forkar o processo, por isso, esses comandos são
 	   executados antes */
 	if (!strcmp(pipeline->command[0][0],"exit")) n_exit(); /* Exit */
+	else if (!strcmp(pipeline->command[0][0],"help")) help(); /* Help */
 	else if (!strcmp(pipeline->command[0][0],"cd")) { /* CD */
 		cd(pipeline);
 		return;
@@ -293,6 +322,7 @@ void runcommand (pipeline_t *pipeline) {
 		fg(pipeline->command[0][1]);
 		return;
 	}
+	else if (!strcmp(pipeline->command[0][0],"authors")) authors(); /* Help */
 
 	/* Verifica se é background */
 	if (pipeline->ground == BACKGROUND) flagBackGround = 1;
