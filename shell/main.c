@@ -97,8 +97,8 @@ void ls () {
 
         while ((drnt = readdir(dir))) 
         	if (drnt->d_name[0] != '.')
-        		printf("%-30s\n", drnt->d_name); /* Lista todos os arquivos */
-
+      			printf("%-30s\n", drnt->d_name);  /* Lista todos os arquivos */
+        printf("\n");
         closedir(dir);
     	exit(EXIT_SUCCESS);
 
@@ -113,6 +113,28 @@ void pwd () {
 	exit(EXIT_SUCCESS);
 
 }
+
+int echo(int argc, char *argv[]) {
+	int nflag;
+
+	if (*++argv && !strcmp(*argv, "-n")) {
+		++argv;
+		nflag = 1;
+	}
+	else
+		nflag = 0;
+
+	while (*argv) {
+		(void)fputs(*argv, stdout);
+		if (*++argv)
+			putchar(' ');
+	}
+	if (!nflag)
+		putchar('\n');
+
+	return 0;
+}
+
 
 void cd (pipeline_t *pipeline) {
 
@@ -152,9 +174,13 @@ void fjobs () {
 }
 
 void bg (char *command) { /* bg — Resume a suspended program without bringing it to the foreground. */
+		if (command == NULL){
+			printf("Params were not passedParametros nao foram passados.\n");
+			return;
+		}
 	int bgPid;
 
-	if (getStatus(jobs,atoi(command)) == 1) printf("Processo ja esta em background\n");
+	if (getStatus(jobs,atoi(command)) == 1) printf("Processo ja esta em background.\n");
 	else {
 
 		signal (SIGINT,  SIG_IGN);
@@ -168,7 +194,11 @@ void bg (char *command) { /* bg — Resume a suspended program without bringing 
 	return;
 }
 
-void fg (char *command) { /* continues a stopped job by running it in the foreground */
+void fg (char *command) { /* Resume jobspec in the foreground, and make it the  current  job */
+	if (command == NULL) {
+		printf("Parametros nao foram passados.\n");
+		return;
+	}
 	int bgPid, aux, status;
 
 	bgPid = getPIDbyChave(jobs,atoi(command));
@@ -199,8 +229,8 @@ void help () {
   printf("The following are built in:\n");
   printf("%s\n", "mkdir");
   printf("%s\n", "jobs");
-  printf("%s\n", "echo");
   printf("%s\n", "exit");
+  printf("%s\n", "echo");
   printf("%s\n", "cd");
   printf("%s\n", "bg");
   printf("%s\n", "fg");
@@ -347,9 +377,13 @@ void runcommand (pipeline_t *pipeline) {
 		redirect(pipeline); /* Verifica se necessita de um redirecionamento */
 	
 		if (!strcmp(pipeline->command[0][0],"ls") && (pipeline->command[0][1] == NULL)) ls(); /* LS */
+		
 		else if (!strcmp(pipeline->command[0][0],"pwd")) pwd(); /* Pwd */
+		
 		else if (!strcmp(pipeline->command[0][0],"jobs")) fjobs(); /* Jobs */
-		else {
+
+		else 
+		{
 			if (!flagBackGround) { /* Se não for um comando de execução background, os sinais devem ser ativos para
 				que os filhos possam ser mortos */
 				signal(SIGINT, SIG_DFL);
