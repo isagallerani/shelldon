@@ -61,7 +61,7 @@
    Custom errors.
  */
 
-/* Rerport a custom error and exit.*/
+/* Report a custom error and exit.*/
 
 #define fatal(expression, message)						\
   do { if ((expression)) {fprintf (stderr, "%s: %s: %d: %s: %s\n",	\

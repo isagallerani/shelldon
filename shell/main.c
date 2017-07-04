@@ -26,10 +26,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include "foosh.h"
-#include "debug.h"
-
-#include <fcntl.h>
+#include <fcntl.h> /* file control options */
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <sys/stat.h>
@@ -38,7 +35,22 @@
 #include <string.h>
 #include <dirent.h>
 #include <signal.h>
+
+/* define o buffer e propriedades, algumas macros, */
+#include "foosh.h" 	
 #include "listaDinamica.h"
+
+/* 
+	#include "debug.h" Macros de erros
+	Custom errors.
+	Report a custom error and exit. 
+*/
+#define DEFAULT_ERR "Something wrong"
+#define fatal(expression, message)						\
+  do { if ((expression)) {fprintf (stderr, "%s: %s: %d: %s: %s\n",	\
+    "Fatal ", __FILE__, __LINE__,\
+	   __PRETTY_FUNCTION__, message ? message : DEFAULT_ERR ); \
+  exit (EXIT_FAILURE);}} while (0)
 
 #define PROMPT "$> "
 
@@ -58,14 +70,14 @@ void redirect (pipeline_t *pipeline) {
 	if ( REDIRECT_STDOUT(pipeline) ) { /* Redirecionamento de saida */
 		close(1); /* Fecha o arquivo padrão de saida, para substitui-lo pelo inserido pelo usuario */
 		fd_out = open(pipeline->file_out, O_CREAT | O_TRUNC | O_RDWR, S_IRUSR | S_IWUSR);
-		fatal(fd_out < 0, "open"); 
+		fatal(fd_out < 0, "open"); /* Report a custom error and exit.*/
 		dup(fd_out); /* Como o arquivo padrão de saida é -1, então ele preenche com o fd_out */
 	}
 		
 	if ( REDIRECT_STDIN(pipeline) ) { /* Redirecionamento de entrada */
 		close(0); /* Fecha o arquivo padrão de entrada */
 		fd_in = open(pipeline->file_in,O_RDONLY, S_IRUSR | S_IWUSR);
-		fatal(fd_in < 0, "open");
+		fatal(fd_in < 0, "open"); /* Report a custom error and exit.*/
 		dup(fd_in); /* Como o arquivo padrão de entrada é -1, então ele preenche com o fd_in */
 	}
 
