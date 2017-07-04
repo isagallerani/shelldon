@@ -28,7 +28,7 @@
 #ifndef ITEM_H
 #define	ITEM_H
 
-typedef struct  {
+typedef struct  { /* Item eh basicamente uma struct que guarda informacoes sobre os processos*/
 	char nome[50];
   	int chave;
   	int pid;

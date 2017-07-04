@@ -71,15 +71,16 @@ void redirect (pipeline_t *pipeline) {
 
 	return;
 }
-void authors () {
+void autores() {
 	printf("\n");
-	printf("\tShelldon was created in early 2017 as a practical work of the discipline \n");
-	printf("\tOperating Systems 2, offered by Ph.D. F. Monaco at the Instituto de Mathematical\n");
-	printf("\tand Computer Sciences (ICMC) of the University of São Paulo (USP).\n");
-	printf("\tHere is a list of people who, in some way, make this project become real:\n");
+	printf("\tShelldon foi criado no começo de 2017 como um trabalho prático da disciplina\n");
+	printf("\tde Sistemas Operacionais 2, ofertada pelo PhD. F. J. Monaco no Instituto de\n");
+	printf("\tCiências Matemáticas e de Computação (ICMC) da Universidade de São Paulo (USP).\n");
+	printf("\n");
+	printf("\tAqui está a lista de pessoas que, de alguma forma, fizeram esse projeto se tornar real:\n");
 	printf("\tAlessandra de Souza Camargo   <552038@comp.ufscar.br> \n");
-	printf("\tAlexandre Da Silva Lara Pinto <587117@comp.ufscar.br> \n");
-	printf("\tLucas Eduardo Pessoa          <551864@comp.ufscar.br> \n");
+	printf("\tAlexandre Da Silva Lara Pinto <alexandre.silva.lara.pinto@usp.br> \n");
+	printf("\tLucas Eduardo Pessoa          <lucaspessoa@usp.br> \n");
 	printf("\tTiago Avellar Fernandes       <551910@comp.ufscar.br> \n");
 	printf("\tFrancisco José Monaco         <monaco@icmc.usp.br> \n");
 	printf("\n");
@@ -114,7 +115,7 @@ void pwd () {
 
 }
 
-int echo(int argc, char *argv[]) {
+int echo(char *argv[]) {
 	int nflag;
 
 	if (*++argv && !strcmp(*argv, "-n")) {
@@ -224,17 +225,19 @@ void n_exit () {
 }
 
 void help () {
-  printf("==== Shelldon Help Panel ====\n");
-  printf("Type program names and arguments, and hit enter.\n");
-  printf("The following are built in:\n");
-  printf("%s\n", "mkdir");
-  printf("%s\n", "jobs");
-  printf("%s\n", "exit");
-  printf("%s\n", "echo");
-  printf("%s\n", "cd");
-  printf("%s\n", "bg");
-  printf("%s\n", "fg");
-  printf("Use the man command for information on other programs.\n");
+  printf("==== Shelldon - Painel de ajuda ====\n");
+  printf("Digite nomes e argumentos de programas e pressione enter.\n");
+  printf("Os seguintes são incorporados:\n");
+  printf("  %s\n", "mkdir");
+  printf("  %s\n", "jobs");
+  printf("  %s\n", "exit");
+  printf("  %s\n", "print");
+  printf("  %s\n", "cd");
+  printf("  %s\n", "bg");
+  printf("  %s\n", "fg");
+  printf("  %s\n", "help");
+  printf("  %s\n", "autores");
+  printf("Use o comando man para obter informações sobre outros programas.\n");
 }
 
 
@@ -249,7 +252,8 @@ void clearDone () {
 
 void rodaPipe (pipeline_t *pipeline, int *entrada, int *saida, int position) {
 
-	int pid, fdIn, fdOut, aux;
+	int pid, fdIn, fdOut;
+	int aux;
 
 	pid = fork();
 	fatal(pid < 0, NULL);
@@ -325,8 +329,8 @@ void functionPipeline (pipeline_t *pipeline) {
 
 void runcommand (pipeline_t *pipeline) {
 
-	int aux, status, pid, flagBackGround = 0;
-
+	int status, pid, flagBackGround = 0;
+	int aux;
 	clearDone(); /* Verifica se algum dos jobs foi finalizado, para que se sim, sair da lista */
 
 	if (pipeline->ncommands > 1) { /* Se o comando inserido foi um pipeline */
@@ -337,7 +341,9 @@ void runcommand (pipeline_t *pipeline) {
 	/* Para executar exit, cd ou mkdir não é necessário forkar o processo, por isso, esses comandos são
 	   executados antes */
 	if (!strcmp(pipeline->command[0][0],"exit")) n_exit(); /* Exit */
+
 	else if (!strcmp(pipeline->command[0][0],"help")) help(); /* Help */
+
 	else if (!strcmp(pipeline->command[0][0],"cd")) { /* CD */
 		cd(pipeline);
 		return;
@@ -352,7 +358,11 @@ void runcommand (pipeline_t *pipeline) {
 		fg(pipeline->command[0][1]);
 		return;
 	}
-	else if (!strcmp(pipeline->command[0][0],"authors")) authors(); /* Help */
+	else if (!strcmp(pipeline->command[0][0],"autores")) autores(); /* Autores */
+	else if (!strcmp(pipeline->command[0][0],"print")) { /* Print */
+		echo(pipeline->command[0]); 
+		return;
+	}
 
 	/* Verifica se é background */
 	if (pipeline->ground == BACKGROUND) flagBackGround = 1;
@@ -393,7 +403,6 @@ void runcommand (pipeline_t *pipeline) {
 			aux = execvp(pipeline->command[0][0],pipeline->command[0]); /* Executa o comando, se não for um dos anteriores */
 			if (aux < 0) exit(EXIT_FAILURE);
 		} 
-
 	}
 
 	if (flagBackGround) { /* Se o comando for background, deve ser inserido na lista */
