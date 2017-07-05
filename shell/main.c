@@ -36,7 +36,7 @@
 #include <dirent.h>
 #include <signal.h>
 
-/* define o buffer e propriedades, algumas macros, */
+/* define o buffer e propriedades, algumas macros, pipeline e propriedades*/
 #include "foosh.h" 	
 #include "listaDinamica.h"
 
@@ -45,6 +45,7 @@
 	Custom errors.
 	Report a custom error and exit. 
 */
+
 #define DEFAULT_ERR "Something wrong"
 #define fatal(expression, message)						\
   do { if ((expression)) {fprintf (stderr, "%s: %s: %d: %s: %s\n",	\

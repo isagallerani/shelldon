@@ -28,7 +28,7 @@
 #ifndef ITEM_H
 #define	ITEM_H
 
-typedef struct  { /* Item eh basicamente uma struct que guarda informacoes sobre os processos*/
+typedef struct  { /* Item eh basicamente uma struct que guarda informacoes sobre os processos/jobs */
 	char nome[50];
   	int chave;
   	int pid;
@@ -36,9 +36,9 @@ typedef struct  { /* Item eh basicamente uma struct que guarda informacoes sobre
   	int ground; /* Define se esta background (1) ou foreground (0) */
 } ITEM;
 
-ITEM *criar_item(int chave, int pid, int status, int ground, char* nome);
-void apagar_item(ITEM **item);
-void imprimir_item(ITEM *item);
+ITEM *criar_item(int chave, int pid, int status, int ground, char* nome); /* aloca memória, incializa variaveis */
+void apagar_item(ITEM **item); /* libera a memória utilizada por um item */
+void imprimir_item(ITEM *item); /* imprime a chave do item */
 
 #endif	/* ITEM_H */
 
