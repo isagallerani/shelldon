@@ -24,7 +24,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-#include <debug.h>
+#include "debug.h"
 
 
 int main (int argc, char **argv)

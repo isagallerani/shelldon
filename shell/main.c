@@ -177,7 +177,7 @@ void fjobs () {
 
 void bg (char *command) { /* bg — Resume a suspended program without bringing it to the foreground. */
 		if (command == NULL){
-			printf("Params were not passedParametros nao foram passados.\n");
+			printf("Parametros nao foram passados.\n");
 			return;
 		}
 	int bgPid;
@@ -235,6 +235,7 @@ void help () {
   printf("  %s\n", "print");
   printf("  %s\n", "cd");
   printf("  %s\n", "bg");
+  printf("  %s\n", "ls");
   printf("  %s\n", "fg");
   printf("  %s\n", "help");
   printf("  %s\n", "autores");
@@ -344,7 +345,7 @@ void runcommand (pipeline_t *pipeline) {
 	if (!strcmp(pipeline->command[0][0],"exit")) n_exit(); /* Exit */
 
 	else if (!strcmp(pipeline->command[0][0],"help")) help(); /* Help */
-
+	else if (!strcmp(pipeline->command[0][0],"autores")) autores(); /* Autores */
 	else if (!strcmp(pipeline->command[0][0],"cd")) { /* CD */
 		cd(pipeline);
 		return;
@@ -359,7 +360,6 @@ void runcommand (pipeline_t *pipeline) {
 		fg(pipeline->command[0][1]);
 		return;
 	}
-	else if (!strcmp(pipeline->command[0][0],"autores")) autores(); /* Autores */
 	else if (!strcmp(pipeline->command[0][0],"print")) { /* Print */
 		echo(pipeline->command[0]); 
 		return;

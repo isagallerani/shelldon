@@ -22,7 +22,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include <debug.h>
+#include "debug.h"
 
 
 int main (int argc, char **argv)
