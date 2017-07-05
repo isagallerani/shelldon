@@ -30,7 +30,7 @@
 #include "Item.h"
 #include <string.h>
 
-typedef struct NO {
+typedef struct NO { /* um no eh um item com um ponteiro para o proximo */
     ITEM *item;
     struct NO *proximo;
 } NO;

@@ -37,21 +37,9 @@
 #include <signal.h>
 
 /* define o buffer e propriedades, algumas macros, pipeline e propriedades*/
-#include "foosh.h" 	
+#include "foosh.h"
+#include "debug.h" /* Macros de erros customizaveis*/ 	
 #include "listaDinamica.h"
-
-/* 
-	#include "debug.h" Macros de erros
-	Custom errors.
-	Report a custom error and exit. 
-*/
-
-#define DEFAULT_ERR "Something wrong"
-#define fatal(expression, message)						\
-  do { if ((expression)) {fprintf (stderr, "%s: %s: %d: %s: %s\n",	\
-    "Fatal ", __FILE__, __LINE__,\
-	   __PRETTY_FUNCTION__, message ? message : DEFAULT_ERR ); \
-  exit (EXIT_FAILURE);}} while (0)
 
 #define PROMPT "$> "
 
