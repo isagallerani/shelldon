@@ -36,8 +36,8 @@
 #include <dirent.h>
 #include <signal.h>
 
-/* define o buffer e propriedades, algumas macros, pipeline e propriedades*/
-#include "foosh.h"
+
+#include "foosh.h" /* utilitarios - define o buffer e propriedades, algumas macros, pipeline e propriedades*/
 #include "debug.h" /* Macros de erros customizaveis*/ 	
 #include "listaDinamica.h"
 
