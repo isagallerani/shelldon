@@ -15,7 +15,6 @@
 
 # Makefile generated source #
 #############################
-Makefile
 autom4te.cache/
 config.h
 config.log
